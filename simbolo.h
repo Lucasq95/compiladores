@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h> 
+#include <ctype.h>
 #include <stdio.h>
 
 typedef struct listSymbol {
@@ -41,12 +41,13 @@ symbolNode* insert(char* value) {
     if (foundNode != NULL) {
         return foundNode;
     }
-    
+
     symbolNode* node = (symbolNode*) malloc(sizeof(symbolNode));
     int len = strlen(value);
     char* valueToInsert = (char*) malloc(len+1);
     strcpy(valueToInsert, value);
-    
+    strcpy(node->type, "");
+
     // Is it a string constant?
     int isConstant = 0;
     if (valueToInsert[0] == '"') {
@@ -61,9 +62,9 @@ symbolNode* insert(char* value) {
         // Is it a integer constant?
     } else if (isdigit(valueToInsert[0]) != 0) {
         isConstant = 1;
-        strcpy(node->type, "INTEGER_CTE");        
+        strcpy(node->type, "INTEGER_CTE");
     }
-    
+
     if (isConstant == 1) {
         strcpy(node->name, "");
         node->name[0] = '_' ;
@@ -213,7 +214,7 @@ void putConstOnSymbolTable(char* id, char* value, int numb, float fnumb, char* t
             strcpy(symbol->value,s);
             symbol->length = 0;
         }
-        
+
     }
 }
 
@@ -241,7 +242,7 @@ void saveTable() {
 }
 
 void concatenate(char* original, char* add) {
-    original++;     
+    original++;
     while(*add){
         *original = *add;
         add++;
@@ -250,15 +251,15 @@ void concatenate(char* original, char* add) {
     *original = '\0';
 }
 
-void removeChar(char *s, int c){ 
-    int j, n = strlen(s); 
+void removeChar(char *s, int c){
+    int j, n = strlen(s);
     int i;
     for (i=j=0; i<n; i++) {
         if (s[i] != c) {
             s[j++] = s[i];
-        } 
-    } 
-    s[j] = '\0'; 
+        }
+    }
+    s[j] = '\0';
 }
 
 char * removeFirstCharConstant(char * constant) {
@@ -306,7 +307,7 @@ char* getSymbolName(void *symbolPointer, int type) {
         case 2:
             floatValue = *(float*)symbolPointer;
             gcvt (floatValue, 7, symbol);
-            break; 
+            break;
         case 3:
             strcpy(symbol, (char*)symbolPointer);
             removeChar(symbol, '"');
@@ -316,7 +317,7 @@ char* getSymbolName(void *symbolPointer, int type) {
         fprintf(stderr, "\n ERROR: symbol %s not found", symbol);
         exit(1);
     }
-    return strdup(node->name); 
+    return strdup(node->name);
 }
 
 void printTable() {
@@ -326,7 +327,7 @@ void printTable() {
     while(current != NULL){
         printf("%s\t%s\t%s\t%d\n", current->name, current->type, current->value, current->length);
         current = current->next;
-    }   
+    }
 }
 
 void printTable1(identifierNode* a) {
@@ -336,5 +337,5 @@ void printTable1(identifierNode* a) {
     while(current != NULL){
         printf("%s\n", current->value);
         current = current->next;
-    }   
+    }
 }

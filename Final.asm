@@ -228,18 +228,6 @@ IF_3:
 
 
 IF_4:
-	; Simple Asignation
-	FLD _100
-	FSTP a
-
-	; Simple Asignation
-	FLD _100
-	FSTP b
-
-	; Simple Asignation
-	FLD _100
-	FSTP c
-
 	; Condition
 	FLD a
 	FCOMP b

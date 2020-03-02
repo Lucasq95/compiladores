@@ -56,6 +56,7 @@ ast* tree;
 %token  FLOAT
 %token  STRING
 %token  OP_ASIG
+%token  ALL_EQUALS
 
 %left   OP_SUMA
 %left   OP_RESTA
@@ -153,6 +154,7 @@ condiciones: condicion AND condicion {$$ = newNode("AND", $1, $3); printf("\nReg
     |   condicion OR condicion  {$$ = newNode("OR", $1, $3); printf("\nRegla 24 : cond OR cond\n");}
     |   NOT P_A condicion P_C {$$ = newNode("NOT", $3, NULL); printf("\nRegla 25 : NOT cond\n");}
     |   condicion {$$ = $1; printf("\nRegla 26 : Condicion\n");}
+    |   all_equals {printf("\nRegla 63: AllEquals condicion\n");}
 ;
 condicion: ID operador_logico factor    {validateCondition($1,$3,1); $$ = newNode($2,newLeaf($1),$3); printf("\nRegla 27 : ID Operador Logico Comparado\n");}
 ;
@@ -203,6 +205,18 @@ tipos_primitivos:   STRING {insertTypeIdentifier($1); printf("\nRegla 56 : Tipo_
     |   FLOAT {insertTypeIdentifier($1); printf("\nRegla 57 : Tipo_Primitivo Float\n");}
     |   INT {insertTypeIdentifier($1); printf("\nRegla 58 : Tipo_Primitivo Int\n");}
 ;
+all_equals: ALL_EQUALS P_A listas_exp P_C {crearNodosCondicionAllEqual(); printf("\nRegla 59: AllEquals\n");}
+;
+listas_exp: listas_exp COMA lista {printf("\nRegla 60: Listas de Expresiones\n");}
+    | lista COMA lista {printf("\nRegla 61: Dos listas de expresiones\n");}
+;
+lista: C_A items C_C {cerrarListaAllEqual(); printf("\nRegla 62: Lista de expresiones\n");}
+;
+items: items COMA expresion {insertarNodoEnListaAllEqual($3); printf("\nRegla 63: Mas de un Item en la lista de expresiones\n");}
+;
+items: expresion {insertarNodoEnListaAllEqual($1); printf("\nRegla 64: Un item en la lista de expresiones\n");}
+;
+
 %%
 
 int main(int argc,char *argv[]){
@@ -261,7 +275,7 @@ void validateAsignation(char* id, ast* exp) {
             fprintf(stderr, "\n[E] Incompatible assignment, line: %d\n", yylineno);
             exit(1);
         }
-        if((strcmp(symbol->type, "INT") == 0 && (strcmp(treeValue->type, "FLOAT") == 0 || strcmp(treeValue->type, "FLOAT_CTE") == 0 || strcmp(treeValue->type, "CTE_REAL") == 0)) 
+        if((strcmp(symbol->type, "INT") == 0 && (strcmp(treeValue->type, "FLOAT") == 0 || strcmp(treeValue->type, "FLOAT_CTE") == 0 || strcmp(treeValue->type, "CTE_REAL") == 0))
         || strcmp(symbol->type, "FLOAT") == 0 && (strcmp(treeValue->type, "INT") == 0 || strcmp(treeValue->type, "INTEGER_CTE") == 0 || strcmp(treeValue->type, "CTE_ENT") == 0)) {
             fprintf(stderr, "\n[E] Incompatible assignment, line: %d\n", yylineno);
             exit(1);

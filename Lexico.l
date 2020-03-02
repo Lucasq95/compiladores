@@ -15,7 +15,7 @@ void validarComentarios();
 
 %}
 
-%option noyywrap  
+%option noyywrap
 %option yylineno
 
 DIGITO			[0-9]
@@ -37,8 +37,8 @@ BLANK       [" "]
 ")"				{ return P_C;}
 "["				{ return C_A;}
 "]"				{ return C_C;}
-"{"				{ return L_A;} 
-"}"				{ return L_C;} 
+"{"				{ return L_A;}
+"}"				{ return L_C;}
 ">"       { return OP_MAX;}
 ">="      { return OP_MAXEQ;}
 "<"       { return OP_MIN;}
@@ -66,6 +66,7 @@ BLANK       [" "]
 "PRINT"		{ return PRINT;}
 "READ"		{ return READ;}
 "CONST"		{ return CONST;}
+"AllEquals" { return ALL_EQUALS;}
 {ID}			{ strcpy(yylval.string_value, yytext); insert(yytext); return ID;}
 {COMMENT} { validarComentarios();}
 {CTE_STRING}	{ checkearLimitesConstanteString();   strcpy(yylval.string_value, yytext);  insert(yytext); return CTE_STRING;}
@@ -84,7 +85,7 @@ void validarComentarios() {
   cadena = cadena + 3;
   int comentarioApertura = 0;
   int i;
-  
+
   for(i=0;  i < yyleng - 3; i ++){
     if(*cadena == '-' && *(cadena+1) == '-' && *(cadena+2) == '/'){
       if(comentarioApertura == 1){
