@@ -18,3 +18,14 @@ IF(AllEquals([a, b], [c, d], [e, f])) {
 		b := 13
 	}
 }
+
+DO a
+	CASE a == 2
+		b := 10
+	CASE a == 3
+		b := 4
+	CASE a == 4
+		b := 4
+		a := 4
+		f := 4
+ENDDO

@@ -67,6 +67,10 @@ BLANK       [" "]
 "READ"		{ return READ;}
 "CONST"		{ return CONST;}
 "AllEquals" { return ALL_EQUALS;}
+"DO"      { return DO;}
+"CASE"    { return CASE;}
+"ENDDO"   { return ENDDO;}
+"DEFAUL"   { return DEFAULT;}
 {ID}			{ strcpy(yylval.string_value, yytext); insert(yytext); return ID;}
 {COMMENT} { validarComentarios();}
 {CTE_STRING}	{ checkearLimitesConstanteString();   strcpy(yylval.string_value, yytext);  insert(yytext); return CTE_STRING;}

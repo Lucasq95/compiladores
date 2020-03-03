@@ -57,6 +57,10 @@ ast* tree;
 %token  STRING
 %token  OP_ASIG
 %token  ALL_EQUALS
+%token  DO
+%token  CASE
+%token  ENDDO
+%token  DEFAULT
 
 %left   OP_SUMA
 %left   OP_RESTA
@@ -105,6 +109,9 @@ ast* tree;
 %type <ast> termino
 %type <ast> factor
 %type <ast> all_equals
+%type <ast> condition_case
+%type <ast> case_solo
+%type <ast> lista_cases
 %type <auxLogicOperator> operador_logico
 
 %union {
@@ -129,6 +136,7 @@ cuerpo_programa: cuerpo_programa sentencia {flagDeclaration = 1; $$ = newNode("C
 sentencia: asignacion_s     {$$ = $1; printf("\nRegla 5 : Asignacion Simple\n");}
     |   asignacion_m        {$$ = $1; printf("\nRegla 6 : Asignacion Multiple\n");}
     |   decision            {$$ = $1; printf("\nRegla 7 : Decision\n");}
+    |   condition_case      {printf("\nRegla 67 : Condicion DO Case\n");}
     |   iteracion           {$$ = $1; printf("\nRegla 8 : Iteracion\n");}
     |   printear            {$$ = $1; printf("\nRegla 9 : Print\n");}
     |   obtain              {$$ = $1; printf("\nRegla 10 : READ\n");}
@@ -217,7 +225,18 @@ items: items COMA expresion {insertarNodoEnListaAllEqual($3); printf("\nRegla 63
 ;
 items: expresion {insertarNodoEnListaAllEqual($1); printf("\nRegla 64: Un item en la lista de expresiones\n");}
 ;
-
+condition_case: DO expresion lista_cases ENDDO{printf("\nRegla 65: DO CASE\n");}
+;
+lista_cases: case_solo {$$ = 1; printf("\nRegla 66: CASE\n");}
+    | lista_cases case_solo {$$ = $1; printf("\nRegla 67: VARIOS CASE\n");}
+    // no anda
+    | case_solo case_default {printf("\nRegla 70: CASE solo con DEFAULT\n");}
+    | lista_cases case_solo case_default {printf("\nRegla 71: Varios CASE con DEFAULT\n");}
+;
+case_solo: CASE condicion cuerpo_programa {$$ = newNode("IF", $2, $3); printf("\nRegla 68: CASE solo\n");}
+;
+case_default: DEFAULT cuerpo_programa {printf("\nRegla 69: DEFAULT CASE");}
+;
 %%
 
 int main(int argc,char *argv[]){
