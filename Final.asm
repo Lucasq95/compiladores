@@ -9,26 +9,9 @@ include number.asm
 MAXTEXTSIZE equ 40
 
 .DATA
-	_30	dd	30.0
-	z	dd	30
-	_1_33	dd	1.33
-	_10	dd	10.0
-	_Ingrese_Numero	db	'Ingrese_Numero','$', 14 dup (?)
-	_3_402823	dd	3.402823
-	_65535	dd	65535.0
-	_50	dd	50.0
-	_IF_AND_ELSE	db	'IF_AND_ELSE','$', 11 dup (?)
-	_IF_AND	db	'IF_AND','$', 6 dup (?)
-	_100	dd	100.0
-	_IF_OR	db	'IF_OR','$', 5 dup (?)
-	_20	dd	20.0
-	_IF_NOT	db	'IF_NOT','$', 6 dup (?)
-	_1	dd	1.0
 	_13	dd	13.0
 	_B_MAYOR_IGUAL	db	'B_MAYOR_IGUAL','$', 13 dup (?)
 	_B_MENOR	db	'B_MENOR','$', 7 dup (?)
-	_PruebaY	db	'PruebaY','$', 7 dup (?)
-	y	db	'PruebaY','$', 7 dup (?)
 	_31_33	dd	31.33
 	_5	dd	5.0
 	_3	dd	3.0
@@ -37,7 +20,7 @@ MAXTEXTSIZE equ 40
 	g	db	MAXTEXTSIZE dup (?),'$'
 	f	dd	?
 	e	dd	?
-	d	db	MAXTEXTSIZE dup (?),'$'
+	d	dd	?
 	c	dd	?
 	b	dd	?
 	a	dd	?
@@ -84,6 +67,14 @@ COPY ENDP
 	FLD _2
 	FSTP c
 
+	; Simple Asignation
+	FLD _2
+	FSTP d
+
+	; Simple Asignation
+	FLD _2
+	FSTP f
+
 	; ADD
 	FLD _9
 	FLD b
@@ -112,16 +103,75 @@ COPY ENDP
 	FLD _31_33
 	FSTP e
 
-	; PRINT
-	displayString y
-	newLine 1
-
 	; Condition
-	FLD b
-	FCOMP a
+	FLD f
+	FCOMP d
 	FSTSW AX
 	SAHF
-	JAE IF_0
+	JNE IF_0
+
+	; Condition
+	FLD f
+	FCOMP b
+	FSTSW AX
+	SAHF
+	JNE IF_0
+
+	; Condition
+	FLD e
+	FCOMP d
+	FSTSW AX
+	SAHF
+	JNE IF_0
+
+	; Condition
+	FLD e
+	FCOMP b
+	FSTSW AX
+	SAHF
+	JNE IF_0
+
+	; Condition
+	FLD d
+	FCOMP d
+	FSTSW AX
+	SAHF
+	JNE IF_0
+
+	; Condition
+	FLD d
+	FCOMP b
+	FSTSW AX
+	SAHF
+	JNE IF_0
+
+	; Condition
+	FLD c
+	FCOMP d
+	FSTSW AX
+	SAHF
+	JNE IF_0
+
+	; Condition
+	FLD c
+	FCOMP b
+	FSTSW AX
+	SAHF
+	JNE IF_0
+
+	; Condition
+	FLD d
+	FCOMP b
+	FSTSW AX
+	SAHF
+	JNE IF_0
+
+	; Condition
+	FLD c
+	FCOMP b
+	FSTSW AX
+	SAHF
+	JNE IF_0
 
 	; PRINT
 	displayString _B_MENOR
@@ -146,159 +196,6 @@ COPY ENDP
 IF_1:
 
 IF_0:
-
-REPEAT_0:
-	; PRINT
-	displayFloat b,2
-	newLine 1
-
-	; ADD
-	FLD _1
-	FLD b
-	FADD
-	FSTP b
-
-
-REPEAT_1:
-	; PRINT
-	displayFloat c,2
-	newLine 1
-
-	; SUB
-	FLD c
-	FLD _1
-	FSUB
-	FSTP c
-
-	; Condition
-	FLD c
-	FCOMP _2
-	FSTSW AX
-	SAHF
-	JA REPEAT_1
-
-	; Condition
-	FLD a
-	FCOMP b
-	FSTSW AX
-	SAHF
-	JAE REPEAT_0
-
-	; Condition
-	FLD a
-	FCOMP b
-	FSTSW AX
-	SAHF
-	JNE IF_2
-
-
-	; PRINT
-	displayString _IF_NOT
-	newLine 1
-
-	; Simple Asignation
-	FLD _20
-	FSTP a
-
-
-IF_2:
-	; Condition
-	FLD a
-	FCOMP b
-	FSTSW AX
-	SAHF
-	JAE IF_3
-
-	; Condition
-	FLD a
-	FCOMP c
-	FSTSW AX
-	SAHF
-	JA IF_4
-
-
-IF_3:
-	; PRINT
-	displayString _IF_OR
-	newLine 1
-
-	; Simple Asignation
-	FLD _100
-	FSTP b
-
-
-IF_4:
-	; Condition
-	FLD a
-	FCOMP b
-	FSTSW AX
-	SAHF
-	JNE IF_5
-
-	; Condition
-	FLD a
-	FCOMP c
-	FSTSW AX
-	SAHF
-	JNE IF_5
-
-	; PRINT
-	displayString _IF_AND
-	newLine 1
-
-	; Simple Asignation
-	FLD _100
-	FSTP b
-
-	JMP IF_6
-
-IF_5:
-	; PRINT
-	displayString _IF_AND_ELSE
-	newLine 1
-
-	; Simple Asignation
-	FLD _50
-	FSTP b
-
-
-IF_6:
-	; Simple Asignation
-	FLD _65535
-	FSTP a
-
-	; Simple Asignation
-	FLD _3_402823
-	FSTP e
-
-	; PRINT
-	displayString _Ingrese_Numero
-	newLine 1
-
-
-	; READ
-	GetFloat a
-
-	; PRINT
-	displayFloat a,2
-	newLine 1
-
-	; Simple Asignation
-	FLD _1
-	FSTP a
-
-	; Simple Asignation
-	FLD a
-	FSTP b
-
-	; Simple Asignation
-	FLD _10
-	FSTP c
-
-	; Simple Asignation
-	FLD _1_33
-	FSTP e
-
 
 	; FREE STACK
 	FFREE st(0)

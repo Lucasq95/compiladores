@@ -10,7 +10,7 @@ _2	INTEGER_CTE	2	0
 g	STRING	-	0
 f	INT	-	0
 e	FLOAT	-	0
-d	STRING	-	0
+d	INT	-	0
 c	INT	-	0
 b	INT	-	1329803313
 a	INT	-	0

@@ -1,15 +1,17 @@
 VAR
-	[INT,INT,INT,STRING,FLOAT]:[a,b,c,d,e]
+	[INT,INT,INT,INT,FLOAT]:[a,b,c,d,e]
 	[INT, STRING]:[f,g]
 ENDVAR
 
 b := 2
 c := 2
+d := 2
+f := 2
 
 a := (((9 + b) - c) / 3 * 5)
 e := 31.33
 
-IF(AllEquals([b,a, a], [c,e, b])) {
+IF(AllEquals([a, b], [c, d], [e, f])) {
 	PRINT "B_MENOR"
 	IF (b >= c) {
 		PRINT "B_MAYOR_IGUAL"
